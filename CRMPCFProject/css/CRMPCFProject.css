@@ -1,0 +1,29 @@
+/* Container styling */
+.pcf-container {
+  display: flex;
+  align-items: center;
+  font-family: "Segoe UI", sans-serif;
+  font-size: 14px;
+  color: #333;
+}
+
+/* The text value */
+.pcf-text {
+  margin-right: 8px;
+}
+
+/* Eye button styling */
+.pcf-toggle-btn {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 16px;
+  color: #0078d4; /* Fluent blue */
+  padding: 2px 4px;
+  border-radius: 4px;
+  transition: background 0.2s ease;
+}
+
+.pcf-toggle-btn:hover {
+  background: #f3f2f1;
+}
