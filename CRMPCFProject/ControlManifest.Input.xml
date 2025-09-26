@@ -1,28 +1,32 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <manifest>
-  <control namespace="HaseebAhmad" constructor="CRMPCFProject" version="0.0.1" display-name-key="CRMPCFProject" description-key="CRMPCFProject description" control-type="standard" >
+  <control 
+    namespace="HaseebAhmad" 
+    constructor="CRMPCFProject" 
+    version="0.0.1" 
+    display-name-key="CRMPCFProject" 
+    description-key="CRMPCFProject description" 
+    control-type="standard">
 
-    <!-- type-group for multiple datatypes -->
+    <!-- Supported types -->
     <type-group name="sensitiveFields">
       <type>SingleLine.Text</type>
       <type>SingleLine.Email</type>
       <type>SingleLine.Phone</type>
-      <type>Whole.None</type>
-      <type>TwoOptions</type>
     </type-group>
 
-    <!-- property bound to type-group -->
-    <property name="sampleProperty" 
-              display-name-key="Property_Display_Key" 
-              description-key="Property_Desc_Key" 
-              of-type-group="sensitiveFields" 
-              usage="bound" 
-              required="true" />
+    <!-- Property -->
+    <property 
+      name="sampleProperty" 
+      display-name-key="Property_Display_Key" 
+      description-key="Property_Desc_Key" 
+      of-type-group="sensitiveFields" 
+      usage="bound" 
+      required="true" />
 
     <resources>
       <code path="index.ts" order="1"/>
-      <css path="css/CRMPCFProject.css" order="2" />
+      <css path="css/CRMPCFProject.css" order="2"/>
     </resources>
-
   </control>
 </manifest>

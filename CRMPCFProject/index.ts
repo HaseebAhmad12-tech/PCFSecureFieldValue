@@ -4,14 +4,12 @@ export class CRMPCFProject implements ComponentFramework.StandardControl<IInputs
     private _container: HTMLDivElement;
     private _inputElement: HTMLInputElement;
     private _toggleButton: HTMLButtonElement;
-    private _value: string | null = null;
+    private _value = "";
     private _masked = true;
+    private _isNewRecord = false;
 
     private _notifyOutputChanged: () => void;
 
-    /**
-     * Init method
-     */
     public init(
         context: ComponentFramework.Context<IInputs>,
         notifyOutputChanged: () => void,
@@ -23,11 +21,10 @@ export class CRMPCFProject implements ComponentFramework.StandardControl<IInputs
         this._container = document.createElement("div");
         this._container.classList.add("pcf-container");
 
-        // Input element
+        // Input
         this._inputElement = document.createElement("input");
         this._inputElement.type = "text";
         this._inputElement.classList.add("pcf-input");
-        this._inputElement.readOnly = true; // default: not editable
         this._inputElement.addEventListener("input", () => {
             this._value = this._inputElement.value;
             this._notifyOutputChanged();
@@ -37,7 +34,7 @@ export class CRMPCFProject implements ComponentFramework.StandardControl<IInputs
         // Toggle button
         this._toggleButton = document.createElement("button");
         this._toggleButton.classList.add("pcf-toggle-btn");
-        this._toggleButton.innerHTML = "👁️"; // default eye
+        this._toggleButton.innerHTML = "👁️";
         this._toggleButton.addEventListener("click", () => {
             this._masked = !this._masked;
             this.updateDisplay();
@@ -47,43 +44,45 @@ export class CRMPCFProject implements ComponentFramework.StandardControl<IInputs
         container.appendChild(this._container);
     }
 
-    /**
-     * Update view
-     */
     public updateView(context: ComponentFramework.Context<IInputs>): void {
-        this._value = context.parameters.sampleProperty.raw ?? "";
-        this.updateDisplay();
+    // Keep track of the raw value
+    const newValue = context.parameters.sampleProperty.raw ?? "";
+
+    // Detect if this is a brand-new record (never saved before)
+    // We can rely on context.mode.isControlDisabled or raw == null (not just empty string)
+    this._isNewRecord = context.parameters.sampleProperty.raw === null;
+
+    if (this._isNewRecord) {
+        // For new records, stay unmasked and editable while typing
+        this._masked = false;
     }
 
-    /**
-     * Update display based on masked state
-     */
+    this._value = newValue;
+    this.updateDisplay();
+}
+
+
     private updateDisplay(): void {
         if (this._masked) {
-            // Masked → stars only, field readonly
+            // Mask the input field securely
             this._inputElement.value = this._value ? this._value.replace(/./g, "*") : "";
             this._inputElement.readOnly = true;
+            this._inputElement.type = "password";
             this._toggleButton.innerHTML = "👁️";
         } else {
-            // Unmasked → real value, field editable
             this._inputElement.value = this._value ?? "";
             this._inputElement.readOnly = false;
+            this._inputElement.type = "text";
             this._toggleButton.innerHTML = "🙈";
         }
     }
 
-    /**
-     * Outputs
-     */
     public getOutputs(): IOutputs {
         return {
-            sampleProperty: this._inputElement.readOnly ? this._value ?? "" : this._inputElement.value
+            sampleProperty: this._inputElement.value
         };
     }
 
-    /**
-     * Destroy
-     */
     public destroy(): void {
         // Cleanup if needed
     }
